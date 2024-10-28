@@ -1,16 +1,45 @@
-import "dotenv/config";
-import express from 'express'
+require("dotenv/config");
+const express = require("express");
+const axios = require("axios");
+const bodyParser = require('body-parser')
 
 const app = express();
-app.use(express.json());
+var jsonParser = bodyParser.json()
 
-app.get("/api", (req, res) => {
-  res.status(200).send({
-    url: process.env.DISCORD_URL,
-  });
+app.get("/", jsonParser, (req, res) => {
+  res.send("Your https server is working!");
 });
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.post("/", jsonParser, (req, res) => {
+
+  if (!process.env.DISCORD_URL) {
+    console.log('DISCORD_URL is missing from env');
+    res.sendStatus(400);
+    return;
+  }
+
+  const data = req.body;
+
+  let messageContent = 'A new ' + data.eventType + ' event was received from the webhook: \n```'
+  messageContent += JSON.stringify(data, null, 2)
+  messageContent += '```\n'
+  messageContent += `Data received at ${new Date().toLocaleString("en-US")}`
+
+  const postData = {
+    content: messageContent,
+  }
+  axios.post(process.env.DISCORD_URL, postData).then(() => {
+    console.log('success')
+    res.sendStatus(200);
+  }).catch((e) => {
+    console.error(e)
+    res.sendStatus(400);
+  })
 });
+
+app.listen(5000, () => {
+  console.log("Running on port 5000.");
+});
+
+// Export the Express API
+module.exports = app;
