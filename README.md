@@ -1,15 +1,7 @@
-# HTTPS server to post messages to discord
+# HTTPS server to receive webhook data
 
-This repo contains a server which receives CDP webhooks updates and posts it to discord.
+This repo contains a server which receives CDP webhooks updates.
 This code is prepared to be deployed to [Vercel](https://vercel.com/).
-
-More info on the docs: https://docs.cdp.coinbase.com/get-started/docs/webhooks/discord-bot-demo
-
-## Prerequisites
-
-You'll need:
-
-- A [Discord webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) URL
 
 ## How to run on localhost
 
@@ -17,9 +9,7 @@ You'll need:
 
 2. Setup tunneling, using Pinggy: `npm run start-pinggy`
 
-3. Copy .env.example into .env file on the same folder and replace the `DISCORD_URL` with your Discord webhook URL and `WEBHOOK_NOTIFICATION_URL` with your pinggy HTTPS URL from previous step.
-
-4. Run your webhook server: `npm run start-server`
+3. Run your webhook server: `npm run start-server`
 
 ## How to deploy to Vercel
 
@@ -30,10 +20,8 @@ Make sure you already have an account on [Vercel](https://vercel.com/signup)
 
 2. Login on your terminal by running the command: `vercel login` and use the browser to login.
 
-3. Then, to deploy it just run `vercel` and it will be deployed after a few seconds.
+3. Then, to deploy it just run `vercel --prod` and it will be deployed after a few seconds.
 
-You need to promote it to production now, so the public URL can be called by our CDP Webhooks service:
+This command will build your app on vercel and promote to production, which will make your endpoint publicly available, so it can be called by our CDP Webhooks service.
 
-1. Go to `https://vercel.com/YOUR_USER_PROJECTS/YOUR_PROJECT_NAME/deployments`, locate the deployment we just made on previous step and click on it's settings (...) and Promote.
-
-2. After a few seconds, it should be available to be accessed publicly and you should be able to access `https://vercel.com/YOUR_USER_PROJECTS/YOUR_PROJECT_NAME` and see a URL under `Domains`. This URL should be used to create the CDP Webhook.
+Now, go to your Vercel dashboard to get the project public URL.
